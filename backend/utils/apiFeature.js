@@ -20,10 +20,21 @@ class ApiFeature {
   filter(){
     const copyQuery ={...this.queryStr}
     const removeValues = ["keywor", "page" , "limit"];
-    removeValues.forEach((key)=>delete copyQuery[key])
-    this.query = this.query.find(copyQuery);
+    removeValues.forEach((key)=>delete copyQuery[key]);
+    let queryStr = JSON.stringify(copyQuery);
+    queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g , key=>`$${key}`);
+    this.query = this.query.find(JSON.parse(queryStr));
     return this;
 }
+
+    pagination(resultPerPage){
+      const currentPage = Number(this.queryStr.page) || 1;
+      const skip  = resultPerPage * (currentPage-1);
+      this.query = this.query.limit(resultPerPage).skip(skip);
+      return this;
+
+}
+
 
 }
 

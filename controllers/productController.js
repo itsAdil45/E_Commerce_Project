@@ -5,13 +5,16 @@ const ApiFeature = require("../backend/utils/apiFeature");
 
 //for admin
 exports.createProduct= catchAsyncError(async (req,res, next)=>{
+    req.body.user = req.user.id
     const product = await Product.create(req.body);
     res.status(201).json({success:true, product});
     });
 
 //get products
 exports.getAllProducts=catchAsyncError( async (req,res)=>{
-    const apiFeature = new ApiFeature(Product.find(),req.query).search().filter();
+    const resultPerPage = 5;
+    const productCount = await  Product.countDocuments();
+    const apiFeature = new ApiFeature(Product.find(),req.query).search().filter().pagination(resultPerPage);
     const products = await apiFeature.query
     res.status(200).json({success:true, products});
 });
@@ -22,7 +25,7 @@ exports.getProductDetails=catchAsyncError( async (req,res,next)=>{
     if(!product){
     return next(new ErrorHandler("product not found" ,404))
     }
-    res.status(200).json({success:true, product});
+    res.status(200).json({success:true, product , productCount});
 });
 
 
