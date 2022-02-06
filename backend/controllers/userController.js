@@ -1,9 +1,9 @@
-const User = require("../backend/models/userModel");
-const ErrorHandler = require("../backend/utils/errorHandler");
-const catchAsyncError = require("../backend/utils/catchAsyncError");
-const sendToken = require("../backend/utils/jwtToken");
+const User = require("../models/userModel");
+const ErrorHandler = require("../utils/errorHandler");
+const catchAsyncError = require("../utils/catchAsyncError");
+const sendToken = require("../utils/jwtToken");
 const { use } = require("express/lib/application");
-const sendEmail = require("../backend/utils/sendEmail");
+const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 
 exports.registerUser = catchAsyncError(async (req, res, next) => {

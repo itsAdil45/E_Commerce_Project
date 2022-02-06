@@ -1,6 +1,6 @@
 const express = require("express");
 const { route } = require("express/lib/application");
-const { newOrder, getSingOrder, myOrder, getAllOrders, updateOrders, deleteOrder } = require("../../controllers/orderController");
+const { newOrder, getSingOrder, myOrder, getAllOrders, updateOrders, deleteOrder } = require("../controllers/orderController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 const router = express.Router();
 
