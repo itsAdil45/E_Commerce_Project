@@ -1,22 +1,25 @@
 import React, { useEffect } from 'react';
 import {CgMouse} from "react-icons/all"
 import "./Home.css"
-import Product from "./Product.jsx"
+import ProductCard from './ProductCard';
 import MetaData from '../layout/MetaData';
-import {getProduct} from "../../actions/productActions";
+import {clearErrors, getProduct} from "../../actions/productActions";
 import {useSelector ,useDispatch} from "react-redux"
-const product ={
-    name:"Tshirt",
-    images:[{url:"https://i.ibb.co/DRST11n/1.webp"}],
-    price: "500Rs",
-    _id: "adilsgsjh"
-
-}
+import Loader from '../layout/Loader';
+import { useAlert } from 'react-alert';
 const Home = () => {
+  const alert = useAlert();
   const dispatch = useDispatch();
   const {loading, error, products, productsCount}= useSelector((state)=>state.products);
-  useEffect(()=>{dispatch(getProduct())},[dispatch]);
+  useEffect(()=>{
+    if(error){
+      alert.error(error);
+      dispatch(clearErrors)
+    }
+    dispatch(getProduct())
+  },[dispatch,error,alert]);
   return <>
+  {loading? (<Loader/>):(<>
     <MetaData title="Home Page"/>
     <div  className='banner'>
     <p>Welcome to my site</p>
@@ -30,13 +33,18 @@ const Home = () => {
     </div>
     <div className="homeHeading">Featured Products</div>
     <div className="container" id="container">
-      {products && products.map((product) =>{
-
-    <Product product ={product}/>
-      })}
+    {products &&
+              products.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
     
     </div>
-  </>;
+  </>)}
+  
+  
+  
+  
+  </>
 };
 
 export default Home;
